@@ -1,6 +1,8 @@
 # GithubUsersMVVM
 This project demonstrates Protocol-Oriented Programming (POP), the UI architectural MVVM pattern with bindings with ReactiveSwift in Swift 5.
 
+![Screenshot](screenshot.jpg)
+
 ## Features 
 - It provides an input UI to enter keywords to search users from [Github search API](https://developer.github.com/v3/search/#search-users)
 - It displays the search results with *UICollectionView*
