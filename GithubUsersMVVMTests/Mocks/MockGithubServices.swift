@@ -14,7 +14,7 @@ class MockGithubSearchService: GithubSearchService {
     
     var stubSearchedUsersItems: [GithubUserItem]?
     var stubSearchedUsersPaginations: Paginations?
-    var stubSearchedError: AFError?
+    var stubSearchedError: Error?
     override func searchUsers(query text: String, page: Int = 1, numPerPage: Int = GITHUB_DEFAULT_NUMBER_PER_PAGE, completion: @escaping SearchUsersResponse) {
         completion(stubSearchedUsersItems, stubSearchedUsersPaginations, stubSearchedError)
     }
@@ -23,7 +23,7 @@ class MockGithubSearchService: GithubSearchService {
 class MockGithubUsersService: GithubUsersService {
     
     var stubSearchedSingleUser: GithubSingleUser?
-    var stubSearchedError: AFError?
+    var stubSearchedError: Error?
     override func singleUser(username: String, completion: @escaping SearchSingleUserResponse) {
         completion(stubSearchedSingleUser!, stubSearchedError)
     }

@@ -73,7 +73,45 @@ class SearchUsersViewModelTests: XCTestCase {
         XCTAssert(sut.users?.first == stubUser.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser.login)")
     }
     
-    func testLoadMoreUsers() {
+    func testLoadUsersWithErrors() {
+        let stubEmptyDesc = "This is none"
+            
+        mockSearchService = MockGithubSearchService()
+        mockSearchService.stubSearchedError = NSError(domain: "NSURLErrorDomain", code: NSURLErrorTimedOut, userInfo: nil)
+        
+        GithubServiceContainer.shared.register(GithubSearchService.self) { [unowned self] _ in
+            self.mockSearchService
+        }.inObjectScope(.discardedAfterTest)
+        
+        sut = SearchUsersViewModel(searchState: .None, emptyDescription: stubEmptyDesc)
+        sut.loadUsers(query: "cat")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Error)")
+        XCTAssertNil(sut.users, "Incorrect loaded users. Expected nil.")
+    }
+    
+    func testLoadNoMoreUsers() {
+        let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
+                                                                                     id: 1,
+                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     score: 10.0)
+        
+        mockSearchService = MockGithubSearchService()
+        mockSearchService.stubSearchedUsersItems = []
+        mockSearchService.stubSearchedUsersPaginations = Paginations(linkHeader: "<https://api.github.com/user/repos?page=3&per_page=100>; rel=\"next\", <https://api.github.com/user/repos?page=50&per_page=100>; rel=\"last\"")
+        
+        GithubServiceContainer.shared.register(GithubSearchService.self) { [unowned self] _ in
+            self.mockSearchService
+        }.inObjectScope(.discardedAfterTest)
+        
+        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubUser1.login])
+        sut.loadMoreUsers(query: "cat", page: 2)
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Loaded)")
+        XCTAssertNotNil(sut.users, "Users are nil")
+        XCTAssert(sut.users?.count == 1, "Incorrect loaded user count \(sut.users?.count ?? 0). Expected 1.")
+        XCTAssert(sut.users?.first == stubUser1.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser1.login)")
+    }
+    
+    func testLoadMoreUsersOnce() {
         let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
                                                                                      id: 1,
                                                                                      avatar_url: "https://github.com/images/error/octocat_happy.gif",
@@ -98,6 +136,26 @@ class SearchUsersViewModelTests: XCTestCase {
         XCTAssert(sut.users?.count == 2, "Incorrect loaded user count \(sut.users?.count ?? 0). Expected 1.")
         XCTAssert(sut.users?.first == stubUser1.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser1.login)")
         XCTAssert(sut.users?.last == stubUser2.login, "Incorrect loaded user \(sut.users?.last ?? "n/a"). Expected \(stubUser2.login)")
+    }
+    
+    func testLoadMoreUsersWithErrors() {
+        let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
+                                                                                     id: 1,
+                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     score: 10.0)
+        
+        mockSearchService = MockGithubSearchService()
+        mockSearchService.stubSearchedError = NSError(domain: "NSURLErrorDomain", code: NSURLErrorTimedOut, userInfo: nil)
+        
+        GithubServiceContainer.shared.register(GithubSearchService.self) { [unowned self] _ in
+            self.mockSearchService
+        }.inObjectScope(.discardedAfterTest)
+        
+        
+        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubUser1.login])
+        sut.loadMoreUsers(query: "cat", page: 2)
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Error)")
+        XCTAssertNil(sut.users, "Incorrect loaded users. Expected nil.")
     }
     
     func testGetEmptyCellModel() {

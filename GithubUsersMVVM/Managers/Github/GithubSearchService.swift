@@ -32,7 +32,7 @@ struct GithubUserItem: Codable {
     var score: Float
 }
 
-typealias SearchUsersResponse = ([GithubUserItem]?, Paginations?, AFError?) -> Void
+typealias SearchUsersResponse = ([GithubUserItem]?, Paginations?, Error?) -> Void
 
 protocol GithubSearchServiceProtocol {
     func searchUsers(query text: String, page: Int, numPerPage: Int, completion: @escaping SearchUsersResponse)

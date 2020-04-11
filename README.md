@@ -32,7 +32,7 @@ This project demonstrates Protocol-Oriented Programming (POP), the UI architectu
 - Dependency Inversion Principle: used Inversion of Control (IoC) pattern to represent Dependency Inversion decoupling dependencies between high-level and low-level layers with Dependency Injection (DI) which depends on Interfaces (Protocol in Swift). All dependencies are given from outside to decouple the usage of an object from its creation. This also brings a benefit of testability. Implemented DI with the DI container pattern.
 
 ## Testing 
-- Unit tests: tested view models with service mocks and data stubs (code coverage of view models: over 90%)
+- Unit tests: tested view models with service mocks and data stubs (code coverage of view models: over 95%)
 
 ## 3rd Party Resources 
 - Icons: https://octicons.github.com

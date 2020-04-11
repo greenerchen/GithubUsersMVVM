@@ -77,7 +77,7 @@ struct GithubSingleUser: Codable {
     }
 }
 
-typealias SearchSingleUserResponse = (GithubSingleUser, AFError?) -> Void
+typealias SearchSingleUserResponse = (GithubSingleUser, Error?) -> Void
 
 protocol GithubUsersServiceProtocol {
     func singleUser(username: String, completion: @escaping SearchSingleUserResponse)

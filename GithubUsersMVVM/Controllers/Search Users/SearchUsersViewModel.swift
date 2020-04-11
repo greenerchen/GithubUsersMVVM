@@ -121,11 +121,10 @@ extension SearchUsersViewModel: SearchUsersViewModelProtocol {
             
             if let users = users,
                 let paginations = paginations,
-                var currentUsers = self?.users {
-                if users.count > 0 {
-                    currentUsers += users.map { $0.login }
-                    self?.update(searchState: .Loaded, users: currentUsers, paginations: paginations)
-                }
+                var currentUsers = self?.users
+            {
+                currentUsers += users.map { $0.login }
+                self?.update(searchState: .Loaded, users: currentUsers, paginations: paginations)
             }
         })
     }
