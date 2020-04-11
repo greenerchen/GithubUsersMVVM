@@ -36,12 +36,24 @@ class SearchUserCellModelTests: XCTestCase {
     }
 
     func testIdealCellModel() {
-        let stubCellModeUser = SearchUserCellModel.SingleUser(username: "octocat",
-                                                              avatarUrl: "https://github.com/images/error/octocat_happy.gif",
-                                                              screenName: "monalisa octocat",
-                                                              bio: "There once was...",
-                                                              location: "San Francisco")
-        let stubUser: GithubSingleUser = GithubSingleUser(login: "octocat", id: 1, nodeId: "", avatarUrl: "https://github.com/images/error/octocat_happy.gif", gravatarId: "", url: "", htmlUrl: "", followersUrl: "", followingUrl: "", gistsUrl: "", starredUrl: "", subscriptionsUrl: "", organizationsUrl: "", reposUrl: "", eventsUrl: "", receivedEventsUrl: "", type: "", siteAdmin: false, name: "monalisa octocat", company: nil, blog: nil, location: "San Francisco", email: nil, hireable: nil, bio: "There once was...", publicRepos: 1, publicGists: 1, followers: 1, following: 1, createdAt: Date(), updatedAt: Date())
+        let stubCellModeUser = StubGithubUserFactory()
+            .createSearchUserCellModelSingleUser(
+                username: "octocat",
+                avatarUrl: "https://github.com/images/error/octocat_happy.gif",
+                screenName: "monalisa octocat",
+                location: "San Francisco",
+                publicRepos: 2,
+                followers: 1,
+                following: 0)
+        let stubUser: GithubSingleUser = StubGithubUserFactory()
+            .createGithubSingleUser(login: "octocat",
+                                    id: 1,
+                                    avatarUrl: "https://github.com/images/error/octocat_happy.gif",
+                                    name: "monalisa octocat",
+                                    location: "San Francisco",
+                                    publicRepos: 2,
+                                    followers: 1,
+                                    following: 0)
         mockUsersService = MockGithubUsersService()
         mockUsersService.stubSearchedSingleUser = stubUser
         
@@ -51,10 +63,6 @@ class SearchUserCellModelTests: XCTestCase {
         
         sut = SearchUserCellModel(user: stubUser.login, emptyDescription: nil, errorDescription: nil)
         let testUser = sut.user.value!
-        XCTAssert(testUser.username == stubCellModeUser.username, "Incorrect username \(testUser.username ?? "n/a"). Expected \(stubCellModeUser.username ?? "n/a").")
-        XCTAssert(testUser.avatarUrl == stubCellModeUser.avatarUrl, "Incorrect avatarUrl \(testUser.avatarUrl ?? "n/a"). Expected \(stubCellModeUser.avatarUrl ?? "n/a").")
-        XCTAssert(testUser.screenName == stubCellModeUser.screenName, "Incorrect screenName \(testUser.screenName ?? "n/a"). Expected \(stubCellModeUser.screenName ?? "n/a").")
-        XCTAssert(testUser.bio == stubCellModeUser.bio, "Incorrect bio \(testUser.bio ?? "n/a"). Expected \(stubCellModeUser.bio ?? "n/a").")
-        XCTAssert(testUser.location == stubCellModeUser.location, "Incorrect location \(testUser.location ?? "n/a"). Expected \(stubCellModeUser.location ?? "n/a").")
+        XCTAssert(testUser == stubCellModeUser, "Incorrect user \(testUser.username ?? "n/a"). Expected \(stubCellModeUser.username ?? "n/a").")
     }
 }

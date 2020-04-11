@@ -74,8 +74,14 @@ class SearchUsersViewModelTests: XCTestCase {
     }
     
     func testLoadMoreUsers() {
-        let stubUser1: GithubUserItem = GithubUserItem(login: "octocat", id: 1, node_id: "", avatar_url: "https://github.com/images/error/octocat_happy.gif", gravatar_id: "", url: "", html_url: "", followers_url: "", subscriptions_url: "", organizations_url: "", repos_url: "", received_events_url: "", type: "", score: 10)
-        let stubUser2: GithubUserItem = GithubUserItem(login: "starcat", id: 2, node_id: "", avatar_url: "https://github.com/images/error/octocat_happy.gif", gravatar_id: "", url: "", html_url: "", followers_url: "", subscriptions_url: "", organizations_url: "", repos_url: "", received_events_url: "", type: "", score: 11)
+        let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
+                                                                                     id: 1,
+                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     score: 10.0)
+        let stubUser2: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "starcat",
+                                                                                     id: 2,
+                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     score: 11.0)
         
         mockSearchService = MockGithubSearchService()
         mockSearchService.stubSearchedUsersItems = [stubUser2]
@@ -115,12 +121,24 @@ class SearchUsersViewModelTests: XCTestCase {
     }
     
     func testGetIdealCellModel() {
-        let stubCellModelUser = SearchUserCellModel.SingleUser(username: "octocat",
-                                                              avatarUrl: "https://github.com/images/error/octocat_happy.gif",
-                                                              screenName: "monalisa octocat",
-                                                              bio: "There once was...",
-                                                              location: "San Francisco")
-        let stubUser: GithubSingleUser = GithubSingleUser(login: "octocat", id: 1, nodeId: "", avatarUrl: "https://github.com/images/error/octocat_happy.gif", gravatarId: "", url: "", htmlUrl: "", followersUrl: "", followingUrl: "", gistsUrl: "", starredUrl: "", subscriptionsUrl: "", organizationsUrl: "", reposUrl: "", eventsUrl: "", receivedEventsUrl: "", type: "", siteAdmin: false, name: "monalisa octocat", company: nil, blog: nil, location: "San Francisco", email: nil, hireable: nil, bio: "There once was...", publicRepos: 1, publicGists: 1, followers: 1, following: 1, createdAt: Date(), updatedAt: Date())
+        let stubCellModelUser = StubGithubUserFactory()
+            .createSearchUserCellModelSingleUser(
+                username: "octocat",
+                avatarUrl: "https://github.com/images/error/octocat_happy.gif",
+                screenName: "monalisa octocat",
+                location: "San Francisco",
+                publicRepos: 2,
+                followers: 1,
+                following: 0)
+        let stubUser: GithubSingleUser = StubGithubUserFactory()
+            .createGithubSingleUser(login: "octocat",
+                                    id: 1,
+                                    avatarUrl: "https://github.com/images/error/octocat_happy.gif",
+                                    name: "monalisa octocat",
+                                    location: "San Francisco",
+                                    publicRepos: 2,
+                                    followers: 1,
+                                    following: 0)
         mockUsersService = MockGithubUsersService()
         mockUsersService.stubSearchedSingleUser = stubUser
         
