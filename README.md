@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/greenerchen/GithubUsersMVVM/badge.svg?branch=master)](https://coveralls.io/github/greenerchen/GithubUsersMVVM?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/greenerchen/githubusersmvvm/badge)](https://www.codefactor.io/repository/github/greenerchen/githubusersmvvm)
 [![Build Status](https://app.bitrise.io/app/c89249ac558e6971/status.svg?token=LTjhKnvGUshY_Tm4JoECnA&branch=master)](https://app.bitrise.io/app/c89249ac558e6971)
 
 # GithubUsersMVVM
