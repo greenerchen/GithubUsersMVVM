@@ -33,16 +33,16 @@ class SearchUserCellModel {
     
     var emptyDescription: String?
     var errorDescription: String?
-    private(set) var user: SingleUser?
+    var user: SingleUser?
     let (displaySignal, displayObserver) = Signal<SingleUser,Never>.pipe()
     
     var usersService: GithubUsersService? = GithubServiceContainer.shared.resolve(GithubUsersService.self)
     
-    init(user: String? = nil, emptyDescription: String? = nil, errorDescription: String? = nil, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) {
-        if let user = user {
+    func download(username: String? = nil, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) {
+        if let username = username {
             dispatchGroup?.enter()
             
-            usersService?.singleUser(username: user, completion: { [weak self] (singleUser, error) in
+            usersService?.singleUser(username: username, completion: { [weak self] (singleUser, error) in
                 guard error == nil else {
                     self?.user = SingleUser(username: singleUser.login, avatarUrl: nil, screenName: nil, location: nil, publicRepos: 0, followers: 0, following: 0)
                     self?.displayObserver.send(value: (self?.user)!)
@@ -71,23 +71,33 @@ class SearchUserCellModel {
             
             
         }
-        
-        self.emptyDescription = emptyDescription
-        self.errorDescription = errorDescription
     }
 }
 
-struct SearchUserCellModelFactory {
+struct SearchUserCellModelBuilder {
     
-    static func create(type: SearchUserCellId, emptyDescription: String? = nil, errorDescription: String? = nil, user: String?, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) -> SearchUserCellModel {
-        switch type {
-        case .empty:
-            return SearchUserCellModel(emptyDescription: emptyDescription!)
-        case .error:
-            return SearchUserCellModel(errorDescription: errorDescription!)
-        case .ideal:
-            return SearchUserCellModel(user: user, dispatchGroup: dispatchGroup, sequentialDisplay: sequentialDisplay)
-        }
+    private let model: SearchUserCellModel
+    
+    init() {
+        model = SearchUserCellModel()
     }
     
+    func buildEmptyDescription(_ emptyDescription: String) -> Self {
+        model.emptyDescription = emptyDescription
+        return self
+    }
+    
+    func buildErrorDescription(_ errorDescription: String) -> Self {
+        model.errorDescription = errorDescription
+        return self
+    }
+    
+    func buildUser(_ username: String, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) -> Self {
+        model.download(username: username, dispatchGroup: dispatchGroup, sequentialDisplay: sequentialDisplay)
+        return self
+    }
+    
+    func getModel() -> SearchUserCellModel {
+        return model
+    }
 }

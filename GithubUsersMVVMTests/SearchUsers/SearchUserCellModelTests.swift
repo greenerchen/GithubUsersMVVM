@@ -25,13 +25,13 @@ class SearchUserCellModelTests: XCTestCase {
 
     func testEmptyCellModel() {
         let stubEmptyDescription = "This is empty"
-        sut = SearchUserCellModel(user: nil, emptyDescription: stubEmptyDescription, errorDescription: nil)
+        sut = SearchUserCellModelBuilder().buildEmptyDescription(stubEmptyDescription).getModel()
         XCTAssert(sut.emptyDescription == stubEmptyDescription, "Incorrect empty description \(sut.emptyDescription ?? ""). Expected \(stubEmptyDescription).")
     }
 
     func testErrorCellModel() {
         let stubErrorDescription = "This is error"
-        sut = SearchUserCellModel(user: nil, emptyDescription: nil, errorDescription: stubErrorDescription)
+        sut = SearchUserCellModelBuilder().buildErrorDescription(stubErrorDescription).getModel()
         XCTAssert(sut.errorDescription == stubErrorDescription, "Incorrect error description \(sut.errorDescription ?? ""). Expected \(stubErrorDescription).")
     }
 
@@ -61,7 +61,7 @@ class SearchUserCellModelTests: XCTestCase {
             self.mockUsersService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUserCellModel(user: stubUser.login, emptyDescription: nil, errorDescription: nil)
+        sut = SearchUserCellModelBuilder().buildUser(stubUser.login).getModel()
         let testUser = sut.user!
         XCTAssert(testUser == stubCellModeUser, "Incorrect user \(testUser.username ?? "n/a"). Expected \(stubCellModeUser.username ?? "n/a").")
     }

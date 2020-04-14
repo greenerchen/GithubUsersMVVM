@@ -66,16 +66,34 @@ class SearchUsersViewModel {
     }
     
     func update(searchState: SearchState = SearchState.emptyResults,
-         users: [String]? = nil,
-         paginations: Paginations? = nil,
-         emptyDescription: String? = nil,
-         errorDescription: String? = nil)
+                emptyDescription: String? = nil)
+    {
+        self.searchState.value = searchState
+        self.emptyDescription = emptyDescription
+        self.errorDescription = nil
+        self.users = nil
+        self.paginations = nil
+    }
+    
+    func update(searchState: SearchState = SearchState.error,
+                errorDescription: String? = nil)
+    {
+        self.searchState.value = searchState
+        self.errorDescription = errorDescription
+        self.emptyDescription = nil
+        self.users = nil
+        self.paginations = nil
+    }
+    
+    func update(searchState: SearchState = SearchState.loaded,
+                users: [String]? = nil,
+                paginations: Paginations? = nil)
     {
         self.searchState.value = searchState
         self.users = users
         self.paginations = paginations
-        self.emptyDescription = emptyDescription
-        self.errorDescription = errorDescription
+        self.emptyDescription = nil
+        self.errorDescription = nil
     }
 }
 
@@ -132,8 +150,21 @@ extension SearchUsersViewModel: SearchUsersViewModelProtocol {
     }
     
     func cellModel(at indexPath: IndexPath) -> SearchUserCellModel {
-        let user: String? = (users != nil && indexPath.item < users!.count) ? users![indexPath.item] : nil
-        return SearchUserCellModelFactory.create(type: cellTypeByState(), emptyDescription: emptyDescription, errorDescription: errorDescription, user: user, dispatchGroup: dispatchGroup, sequentialDisplay: false)
+        switch cellTypeByState() {
+        case .empty:
+            return SearchUserCellModelBuilder()
+                .buildEmptyDescription(emptyDescription!)
+                .getModel()
+        case .error:
+            return SearchUserCellModelBuilder()
+                .buildErrorDescription(errorDescription!)
+                .getModel()
+        case .ideal:
+            let user: String = users![indexPath.item]
+            return SearchUserCellModelBuilder()
+                .buildUser(user, dispatchGroup: dispatchGroup, sequentialDisplay: false)
+                .getModel()
+        }
     }
     
     func cellTypeByState() -> SearchUserCellId {
