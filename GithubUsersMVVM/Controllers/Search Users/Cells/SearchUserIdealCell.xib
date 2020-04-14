@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,9 +35,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="urz-cg-Mww">
-                        <rect key="frame" x="60" y="29" width="100" height="20"/>
+                        <rect key="frame" x="60" y="31" width="270" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="100" id="41B-Cm-ZpQ"/>
+                            <constraint firstAttribute="width" constant="270" id="41B-Cm-ZpQ"/>
                             <constraint firstAttribute="height" constant="20" id="8CQ-Jg-S3t"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -45,14 +45,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location" translatesAutoresizingMaskIntoConstraints="NO" id="Saf-ij-rWQ">
-                        <rect key="frame" x="60" y="53" width="20" height="20"/>
+                        <rect key="frame" x="60" y="55" width="20" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="7hr-Bv-MUa"/>
                             <constraint firstAttribute="width" constant="20" id="MaV-f9-ke8"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cE3-i4-OiO">
-                        <rect key="frame" x="90" y="53" width="204" height="20"/>
+                        <rect key="frame" x="90" y="55" width="204" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="na1-Ot-zqE"/>
                         </constraints>
@@ -130,23 +130,25 @@
                 <constraint firstItem="LG5-4H-hhS" firstAttribute="leading" secondItem="E9E-YH-AjH" secondAttribute="trailing" constant="10" id="WIy-xW-Zgm"/>
                 <constraint firstItem="A61-hP-QP2" firstAttribute="leading" secondItem="lxK-qa-XuL" secondAttribute="leading" id="YeA-wZ-Ph6"/>
                 <constraint firstItem="A61-hP-QP2" firstAttribute="top" secondItem="lxK-qa-XuL" secondAttribute="bottom" constant="3" id="drX-lq-BG9"/>
-                <constraint firstItem="urz-cg-Mww" firstAttribute="width" secondItem="rcA-Aa-GZO" secondAttribute="width" multiplier="0.42735" constant="-15.384615384615373" id="g4Z-bP-kEs"/>
                 <constraint firstItem="cE3-i4-OiO" firstAttribute="trailing" secondItem="rcA-Aa-GZO" secondAttribute="trailing" constant="-36" id="gBE-oe-IFp"/>
                 <constraint firstItem="cE3-i4-OiO" firstAttribute="centerY" secondItem="Saf-ij-rWQ" secondAttribute="centerY" id="hvb-Ye-ryn"/>
                 <constraint firstItem="cVd-AZ-jgZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="kd5-Li-b3s"/>
                 <constraint firstItem="Saf-ij-rWQ" firstAttribute="leading" secondItem="urz-cg-Mww" secondAttribute="leading" id="lzo-s2-TxV"/>
                 <constraint firstItem="Rbq-Bb-3RX" firstAttribute="centerY" secondItem="lxK-qa-XuL" secondAttribute="centerY" id="p2f-yz-6JJ"/>
                 <constraint firstItem="Rbq-Bb-3RX" firstAttribute="leading" secondItem="E9E-YH-AjH" secondAttribute="leading" id="qTz-me-ueG"/>
-                <constraint firstItem="urz-cg-Mww" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="29" id="xO2-4t-QBD"/>
+                <constraint firstItem="urz-cg-Mww" firstAttribute="top" secondItem="rcA-Aa-GZO" secondAttribute="bottom" constant="1" id="xO2-4t-QBD"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="414" height="94"/>
             <connections>
                 <outlet property="avatarImageView" destination="cVd-AZ-jgZ" id="egR-qm-mhD"/>
+                <outlet property="followersIcon" destination="Rbq-Bb-3RX" id="6QA-4Y-bpp"/>
                 <outlet property="followersLabel" destination="lxK-qa-XuL" id="DYT-Ip-nfe"/>
+                <outlet property="followingIcon" destination="msU-YF-jUM" id="Fx0-RE-4Ga"/>
                 <outlet property="followingLabel" destination="A61-hP-QP2" id="CRi-Hj-JKA"/>
                 <outlet property="locationImage" destination="Saf-ij-rWQ" id="d1v-Sr-91H"/>
                 <outlet property="locationLabel" destination="cE3-i4-OiO" id="XHa-yP-Xf1"/>
+                <outlet property="repositoryIcon" destination="E9E-YH-AjH" id="NWC-DV-6DJ"/>
                 <outlet property="repositoryLabel" destination="LG5-4H-hhS" id="3FW-cA-SlP"/>
                 <outlet property="screenNameLabel" destination="urz-cg-Mww" id="uq6-ky-pKM"/>
                 <outlet property="usernameLabel" destination="rcA-Aa-GZO" id="3OO-4l-2kY"/>

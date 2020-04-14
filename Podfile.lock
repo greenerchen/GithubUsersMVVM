@@ -6,6 +6,7 @@ PODS:
   - SDWebImage (5.6.0):
     - SDWebImage/Core (= 5.6.0)
   - SDWebImage/Core (5.6.0)
+  - SkeletonView (1.8.7)
   - Swinject (2.7.1)
 
 DEPENDENCIES:
@@ -13,6 +14,7 @@ DEPENDENCIES:
   - ReactiveCocoa (~> 10.1)
   - ReactiveSwift (~> 6.2)
   - SDWebImage (~> 5.0)
+  - SkeletonView
   - Swinject (~> 2.7.1)
 
 SPEC REPOS:
@@ -21,6 +23,7 @@ SPEC REPOS:
     - ReactiveCocoa
     - ReactiveSwift
     - SDWebImage
+    - SkeletonView
     - Swinject
 
 SPEC CHECKSUMS:
@@ -28,8 +31,9 @@ SPEC CHECKSUMS:
   ReactiveCocoa: a123c42f449c552460a4ee217dd49c76a17c8204
   ReactiveSwift: 07ddf579f4eb3ee3bd656214f0461aaf2c0fd639
   SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
+  SkeletonView: ba5370f41280b2f0a76918bb143c1294232bb4f4
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
 
-PODFILE CHECKSUM: 2e76ae9d3572eeae0a9a8a39499211e8f9e7272c
+PODFILE CHECKSUM: 1a34f0836a4a0e73669c979ea618ae2ceb3cf013
 
 COCOAPODS: 1.8.4

@@ -16,9 +16,9 @@ protocol SearchUsersViewProtocol {
 }
 
 enum SearchUserCellId: String {
-    case Empty = "EmptyCell"
-    case Error = "ErrorCell"
-    case Ideal = "IdealCell"
+    case empty = "EmptyCell"
+    case error = "ErrorCell"
+    case ideal = "IdealCell"
 }
 
 class SearchUsersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
@@ -27,7 +27,7 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
     @IBOutlet weak var collectionView: UICollectionView!
     
     // dependencies
-    var viewModel: SearchUsersViewModel? = SearchUsersViewModelFactory.create(searchState: .None)
+    var viewModel: SearchUsersViewModel? = SearchUsersViewModelFactory.create(searchState: .none)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,31 +35,16 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
         searchBar.placeholder = "Keyword of Github users"
         
         // Register cell classes
-        self.collectionView!.register(UINib(nibName: "SearchUserEmptyCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.Empty.rawValue)
-        self.collectionView!.register(UINib(nibName: "SearchUserErrorCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.Error.rawValue)
-        self.collectionView!.register(UINib(nibName: "SearchUserIdealCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.Ideal.rawValue)
+        self.collectionView!.register(UINib(nibName: "SearchUserEmptyCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.empty.rawValue)
+        self.collectionView!.register(UINib(nibName: "SearchUserErrorCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.error.rawValue)
+        self.collectionView!.register(UINib(nibName: "SearchUserIdealCell", bundle: nil), forCellWithReuseIdentifier: SearchUserCellId.ideal.rawValue)
         self.collectionView.register(UINib(nibName: "LoadingFooterView", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "SearchUserFooter")
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         
+        searchBar.delegate = self
+        
         bind(viewModel: viewModel!)
-        if #available(iOS 13.0, *) {
-            bindSearchBar()
-        } else {
-            // Fallback on earlier versions
-            searchBar.delegate = self
-        }
-    }
-
-    // MARK: Helpers
-    
-    @available(iOS 13.0, *)
-    private func bindSearchBar() {
-        searchBar.searchTextField.reactive.continuousTextValues
-            .throttle(0.3, on: QueueScheduler.main)
-            .observeValues({ [unowned self] (query) in
-                self.viewModel?.loadUsers(query: query)
-            })
     }
     
     /*
@@ -82,7 +67,7 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        if let users = viewModel?.users, users.count > 0 {
+        if let users = viewModel?.users, !users.isEmpty {
             return users.count
         } else {
             return 1
@@ -99,7 +84,7 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionFooter && viewModel!.searchState.value == .LoadingMore {
+        if kind == UICollectionView.elementKindSectionFooter && (viewModel!.searchState.value == .loadingMore || viewModel!.searchState.value == .loading) {
             return collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "SearchUserFooter", for: indexPath)
         }
         return UICollectionReusableView(frame: CGRect.zero)
@@ -110,7 +95,7 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let users = viewModel?.users, users.count > 0,
             let nextPage = viewModel?.paginations?.next {
-            if indexPath.item == users.count - 1 && (viewModel?.searchState.value != .Loading && viewModel?.searchState.value != .LoadingMore) {
+            if indexPath.item == users.count - 1 && (viewModel?.searchState.value != .loading && viewModel?.searchState.value != .loadingMore) {
                 viewModel?.loadMoreUsers(query: searchBar!.text!, page: nextPage)
             }
         }
@@ -123,7 +108,7 @@ class SearchUsersViewController: UIViewController, UICollectionViewDataSource, U
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return viewModel!.searchState.value == .LoadingMore ? CGSize(width: collectionView.safeAreaLayoutGuide.layoutFrame.width, height: 40.0) : CGSize.zero
+        return (viewModel!.searchState.value == .loadingMore || viewModel!.searchState.value == .loading) ? CGSize(width: collectionView.safeAreaLayoutGuide.layoutFrame.width, height: 40.0) : CGSize.zero
     }
     
     // MARK: UISearchBarDelegate
@@ -138,7 +123,7 @@ extension SearchUsersViewController: SearchUsersViewProtocol {
     func bind(viewModel: SearchUsersViewModel) {
         
         viewModel.searchState.producer.startWithValues { [weak self] (state) in
-            if state != .Loading {
+            if state != .loading {
                 DispatchQueue.main.async { [weak self] in
                     self?.collectionView.reloadData()
                 }

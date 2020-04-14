@@ -27,13 +27,13 @@ class SearchUsersViewModelTests: XCTestCase {
 
     func testSearchStateNone() {
         let stubEmptyDesc = "This is none"
-        sut = SearchUsersViewModel(searchState: .None, emptyDescription: stubEmptyDesc)
+        sut = SearchUsersViewModel(searchState: .none, emptyDescription: stubEmptyDesc)
         XCTAssert(sut.emptyDescription == stubEmptyDesc, "Incorrect empty description \(sut.emptyDescription ?? ""). Expected \(stubEmptyDesc).")
     }
 
     func testSearchStateErrorResult() {
         let stubErrorDesc = "This is error"
-        sut = SearchUsersViewModel(searchState: .Error, errorDescription: stubErrorDesc)
+        sut = SearchUsersViewModel(searchState: .error, errorDescription: stubErrorDesc)
         XCTAssert(sut.errorDescription == stubErrorDesc, "Incorrect error description \(sut.errorDescription ?? ""). Expected \(stubErrorDesc).")
     }
     
@@ -48,9 +48,9 @@ class SearchUsersViewModelTests: XCTestCase {
             self.mockSearchService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUsersViewModel(searchState: .EmptyResults, emptyDescription: stubEmptyDesc)
+        sut = SearchUsersViewModel(searchState: .emptyResults, emptyDescription: stubEmptyDesc)
         sut.loadUsers(query: "cat")
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.EmptyResults, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.EmptyResults)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.emptyResults, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.emptyResults)")
         XCTAssert(sut.emptyDescription == stubEmptyDesc, "Incorrect empty description \(sut.emptyDescription ?? ""). Expected \(stubEmptyDesc).")
     }
 
@@ -66,9 +66,9 @@ class SearchUsersViewModelTests: XCTestCase {
             self.mockSearchService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUsersViewModel(searchState: .None, emptyDescription: stubEmptyDesc)
+        sut = SearchUsersViewModel(searchState: .none, emptyDescription: stubEmptyDesc)
         sut.loadUsers(query: "cat")
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Loaded)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.loaded)")
         XCTAssert(sut.users?.count == 1, "Incorrect loaded user count \(sut.users?.count ?? 0). Expected 1.")
         XCTAssert(sut.users?.first == stubUser.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser.login)")
     }
@@ -83,9 +83,9 @@ class SearchUsersViewModelTests: XCTestCase {
             self.mockSearchService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUsersViewModel(searchState: .None, emptyDescription: stubEmptyDesc)
+        sut = SearchUsersViewModel(searchState: .none, emptyDescription: stubEmptyDesc)
         sut.loadUsers(query: "cat")
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Error)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.error)")
         XCTAssertNil(sut.users, "Incorrect loaded users. Expected nil.")
     }
     
@@ -103,9 +103,9 @@ class SearchUsersViewModelTests: XCTestCase {
             self.mockSearchService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubUser1.login])
+        sut = SearchUsersViewModel(searchState: .loaded, users: [stubUser1.login])
         sut.loadMoreUsers(query: "cat", page: 2)
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Loaded)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.loaded)")
         XCTAssertNotNil(sut.users, "Users are nil")
         XCTAssert(sut.users?.count == 1, "Incorrect loaded user count \(sut.users?.count ?? 0). Expected 1.")
         XCTAssert(sut.users?.first == stubUser1.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser1.login)")
@@ -129,9 +129,9 @@ class SearchUsersViewModelTests: XCTestCase {
             self.mockSearchService
         }.inObjectScope(.discardedAfterTest)
         
-        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubUser1.login])
+        sut = SearchUsersViewModel(searchState: .loaded, users: [stubUser1.login])
         sut.loadMoreUsers(query: "cat", page: 2)
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Loaded)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.loaded, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.loaded)")
         XCTAssertNotNil(sut.users, "Users are nil")
         XCTAssert(sut.users?.count == 2, "Incorrect loaded user count \(sut.users?.count ?? 0). Expected 1.")
         XCTAssert(sut.users?.first == stubUser1.login, "Incorrect loaded user \(sut.users?.first ?? "n/a"). Expected \(stubUser1.login)")
@@ -152,9 +152,9 @@ class SearchUsersViewModelTests: XCTestCase {
         }.inObjectScope(.discardedAfterTest)
         
         
-        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubUser1.login])
+        sut = SearchUsersViewModel(searchState: .loaded, users: [stubUser1.login])
         sut.loadMoreUsers(query: "cat", page: 2)
-        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.Error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.Error)")
+        XCTAssert(sut.searchState.value == SearchUsersViewModel.SearchState.error, "Incorrect search state \(sut.searchState.value). Expected \(SearchUsersViewModel.SearchState.error)")
         XCTAssertNil(sut.users, "Incorrect loaded users. Expected nil.")
     }
     
@@ -162,18 +162,18 @@ class SearchUsersViewModelTests: XCTestCase {
         let stubEmptyDesc1 = "This is none"
         let stubEmptyDesc2 = "0 users found. Try to search another keyword."
         
-        sut = SearchUsersViewModel(searchState: .None, emptyDescription: stubEmptyDesc1)
+        sut = SearchUsersViewModel(searchState: .none, emptyDescription: stubEmptyDesc1)
         var model = sut.cellModel(at: IndexPath(item: 0, section: 0))
         XCTAssert(model.emptyDescription! == stubEmptyDesc1, "Incorrect empty description \(model.emptyDescription ?? "n/a"). Expected \(stubEmptyDesc1)")
         
-        sut = SearchUsersViewModel(searchState: .EmptyResults, emptyDescription: stubEmptyDesc2)
+        sut = SearchUsersViewModel(searchState: .emptyResults, emptyDescription: stubEmptyDesc2)
         model = sut.cellModel(at: IndexPath(item: 0, section: 0))
         XCTAssert(model.emptyDescription! == stubEmptyDesc2, "Incorrect empty description \(model.emptyDescription ?? "n/a"). Expected \(stubEmptyDesc2)")
     }
     
     func testGetErrorCellModel() {
         let stubErrorDesc = "This is error"
-        sut = SearchUsersViewModel(searchState: .Error, errorDescription: stubErrorDesc)
+        sut = SearchUsersViewModel(searchState: .error, errorDescription: stubErrorDesc)
         let model = sut.cellModel(at: IndexPath(item: 0, section: 0))
         XCTAssert(model.errorDescription == stubErrorDesc, "Incorrect error description \(model.errorDescription ?? "n/a"). Expected \(stubErrorDesc).")
     }
@@ -205,45 +205,45 @@ class SearchUsersViewModelTests: XCTestCase {
         }.inObjectScope(.discardedAfterTest)
         
         
-        sut = SearchUsersViewModel(searchState: .Loaded, users: [stubCellModelUser.username!])
+        sut = SearchUsersViewModel(searchState: .loaded, users: [stubCellModelUser.username!])
         let model = sut.cellModel(at: IndexPath(item: 0, section: 0))
-        XCTAssertNotNil(model.user.value, "User is nil in the cell model")
-        XCTAssert(model.user.value! == stubCellModelUser, "Incorrect user in the cell model")
+        XCTAssertNotNil(model.user, "User is nil in the cell model")
+        XCTAssert(model.user! == stubCellModelUser, "Incorrect user in the cell model")
     }
     
     func testCellTypeForStateNone() {
-        sut = SearchUsersViewModel(searchState: .None)
+        sut = SearchUsersViewModel(searchState: .none)
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Empty)")
+        XCTAssert(cellType == SearchUserCellId.empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.empty)")
     }
     
     func testCellTypeForStateLoading() {
-        sut = SearchUsersViewModel(searchState: .Loading)
+        sut = SearchUsersViewModel(searchState: .loading)
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Empty)")
+        XCTAssert(cellType == SearchUserCellId.empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.empty)")
     }
     
     func testCellTypeForStateError() {
-        sut = SearchUsersViewModel(searchState: .Error)
+        sut = SearchUsersViewModel(searchState: .error)
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Error, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Error)")
+        XCTAssert(cellType == SearchUserCellId.error, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.error)")
     }
     
     func testCellTypeForStateEmptyResults() {
-        sut = SearchUsersViewModel(searchState: .EmptyResults)
+        sut = SearchUsersViewModel(searchState: .emptyResults)
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Empty)")
+        XCTAssert(cellType == SearchUserCellId.empty, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.empty)")
     }
     
     func testCellTypeForStateLoaded() {
-        sut = SearchUsersViewModel(searchState: .Loaded, users: ["octocat"])
+        sut = SearchUsersViewModel(searchState: .loaded, users: ["octocat"])
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Ideal, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Ideal)")
+        XCTAssert(cellType == SearchUserCellId.ideal, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.ideal)")
     }
     
     func testCellTypeForStateLoadingMore() {
-        sut = SearchUsersViewModel(searchState: .LoadingMore)
+        sut = SearchUsersViewModel(searchState: .loadingMore)
         let cellType = sut.cellTypeByState()
-        XCTAssert(cellType == SearchUserCellId.Ideal, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.Ideal)")
+        XCTAssert(cellType == SearchUserCellId.ideal, "Incorrect cell type \(cellType). Expected \(SearchUserCellId.ideal)")
     }
 }

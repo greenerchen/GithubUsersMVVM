@@ -33,12 +33,12 @@ class SearchUsersViewModelFactory {
 class SearchUsersViewModel {
     
     enum SearchState {
-        case None
-        case Loading
-        case LoadingMore
-        case EmptyResults
-        case Error
-        case Loaded
+        case none
+        case loading
+        case loadingMore
+        case emptyResults
+        case error
+        case loaded
     }
     
     var searchState: MutableProperty<SearchState>
@@ -50,7 +50,9 @@ class SearchUsersViewModel {
     // dependencies
     var searchService: GithubSearchService? = GithubServiceContainer.shared.resolve(GithubSearchService.self)
     
-    init(searchState: SearchState = SearchState.EmptyResults,
+    let dispatchGroup = DispatchGroup()
+    
+    init(searchState: SearchState = SearchState.emptyResults,
          users: [String]? = nil,
          paginations: Paginations? = nil,
          emptyDescription: String? = "Enter a keyword to start searching Github users.",
@@ -63,7 +65,7 @@ class SearchUsersViewModel {
         self.errorDescription = errorDescription
     }
     
-    func update(searchState: SearchState = SearchState.EmptyResults,
+    func update(searchState: SearchState = SearchState.emptyResults,
          users: [String]? = nil,
          paginations: Paginations? = nil,
          emptyDescription: String? = nil,
@@ -80,42 +82,42 @@ class SearchUsersViewModel {
 extension SearchUsersViewModel: SearchUsersViewModelProtocol {
     
     func loadUsers(query: String) {
-        guard query.count > 0 else {
-            update(searchState: .None, emptyDescription: "Enter a keyword to start searching Github users.")
+        guard !query.isEmpty else {
+            update(searchState: .none, emptyDescription: "Enter a keyword to start searching Github users.")
             return
         }
         
-        searchState.value = .Loading
+        searchState.value = .loading
         searchService?.searchUsers(query: query, page: 1, completion: { [weak self] users, paginations, error in
             
             guard error == nil else {
-                self?.update(searchState: .Error, errorDescription: error?.localizedDescription)
+                self?.update(searchState: .error, errorDescription: error?.localizedDescription)
                 return
             }
             
             if let users = users,
                 let paginations = paginations {
-                if users.count == 0 {
-                    self?.update(searchState: .EmptyResults, emptyDescription: "0 users found. Try to search another keyword.")
+                if users.isEmpty {
+                    self?.update(searchState: .emptyResults, emptyDescription: "0 users found. Try to search another keyword.")
                 } else {
                     let usernames = users.map { $0.login }
-                    self?.update(searchState: .Loaded, users: usernames, paginations: paginations)
+                    self?.update(searchState: .loaded, users: usernames, paginations: paginations)
                 }
             }
         })
     }
     
     func loadMoreUsers(query: String, page: Int) {
-        guard query.count > 0 else {
-            update(searchState: .None, emptyDescription: "Enter a keyword to start searching Github users.")
+        guard !query.isEmpty else {
+            update(searchState: .none, emptyDescription: "Enter a keyword to start searching Github users.")
             return
         }
         
-        searchState.value = .LoadingMore
+        searchState.value = .loadingMore
         searchService?.searchUsers(query: query, page: page, completion: { [weak self] users, paginations, error in
             
             guard error == nil else {
-                self?.update(searchState: .Error, errorDescription: error?.localizedDescription)
+                self?.update(searchState: .error, errorDescription: error?.localizedDescription)
                 return
             }
             
@@ -124,24 +126,24 @@ extension SearchUsersViewModel: SearchUsersViewModelProtocol {
                 var currentUsers = self?.users
             {
                 currentUsers += users.map { $0.login }
-                self?.update(searchState: .Loaded, users: currentUsers, paginations: paginations)
+                self?.update(searchState: .loaded, users: currentUsers, paginations: paginations)
             }
         })
     }
     
     func cellModel(at indexPath: IndexPath) -> SearchUserCellModel {
         let user: String? = (users != nil && indexPath.item < users!.count) ? users![indexPath.item] : nil
-        return SearchUserCellModelFactory.create(type: cellTypeByState(), emptyDescription: emptyDescription, errorDescription: errorDescription, user: user)
+        return SearchUserCellModelFactory.create(type: cellTypeByState(), emptyDescription: emptyDescription, errorDescription: errorDescription, user: user, dispatchGroup: dispatchGroup, sequentialDisplay: false)
     }
     
     func cellTypeByState() -> SearchUserCellId {
         switch searchState.value {
-        case .None, .EmptyResults, .Loading:
-            return SearchUserCellId.Empty
-        case .Error:
-            return SearchUserCellId.Error
-        case .Loaded, .LoadingMore:
-            return SearchUserCellId.Ideal
+        case .none, .emptyResults, .loading:
+            return SearchUserCellId.empty
+        case .error:
+            return SearchUserCellId.error
+        case .loaded, .loadingMore:
+            return SearchUserCellId.ideal
         }
     }
 }

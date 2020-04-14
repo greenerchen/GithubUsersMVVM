@@ -31,28 +31,45 @@ class SearchUserCellModel {
         }
     }
     
-    var emptyDescription: String? = nil
-    var errorDescription: String? = nil
-    var user: MutableProperty<SingleUser?> = MutableProperty(nil)
+    var emptyDescription: String?
+    var errorDescription: String?
+    private(set) var user: SingleUser?
+    let (displaySignal, displayObserver) = Signal<SingleUser,Never>.pipe()
     
     var usersService: GithubUsersService? = GithubServiceContainer.shared.resolve(GithubUsersService.self)
     
-    init(user: String? = nil, emptyDescription: String? = nil, errorDescription: String? = nil) {
+    init(user: String? = nil, emptyDescription: String? = nil, errorDescription: String? = nil, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) {
         if let user = user {
+            dispatchGroup?.enter()
+            
             usersService?.singleUser(username: user, completion: { [weak self] (singleUser, error) in
                 guard error == nil else {
-                    self?.user = MutableProperty(SingleUser(username: singleUser.login, avatarUrl: nil, screenName: nil, location: nil, publicRepos: 0, followers: 0, following: 0))
+                    self?.user = SingleUser(username: singleUser.login, avatarUrl: nil, screenName: nil, location: nil, publicRepos: 0, followers: 0, following: 0)
+                    self?.displayObserver.send(value: (self?.user)!)
                     return
                 }
                 
-                self?.user.value = SingleUser(username: singleUser.login,
-                                              avatarUrl: singleUser.avatarUrl,
-                                              screenName: singleUser.name,
-                                              location: singleUser.location,
-                                              publicRepos: singleUser.publicRepos,
-                                              followers: singleUser.followers,
-                                              following: singleUser.following)
+                self?.user = SingleUser(username: singleUser.login,
+                                                  avatarUrl: singleUser.avatarUrl,
+                                                  screenName: singleUser.name,
+                                                  location: singleUser.location,
+                                                  publicRepos: singleUser.publicRepos,
+                                                  followers: singleUser.followers,
+                                                  following: singleUser.following)
+                if sequentialDisplay {
+                    self?.displayObserver.send(value: (self?.user)!)
+                }
+            
+                dispatchGroup?.leave()
             })
+                
+            dispatchGroup?.notify(queue: DispatchQueue.global()) { [weak self] in
+                if !sequentialDisplay {
+                    self?.displayObserver.send(value: (self?.user)!)
+                }
+            }
+            
+            
         }
         
         self.emptyDescription = emptyDescription
@@ -62,14 +79,14 @@ class SearchUserCellModel {
 
 struct SearchUserCellModelFactory {
     
-    static func create(type: SearchUserCellId, emptyDescription: String? = nil, errorDescription: String? = nil, user: String?) -> SearchUserCellModel {
+    static func create(type: SearchUserCellId, emptyDescription: String? = nil, errorDescription: String? = nil, user: String?, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) -> SearchUserCellModel {
         switch type {
-        case .Empty:
+        case .empty:
             return SearchUserCellModel(emptyDescription: emptyDescription!)
-        case .Error:
+        case .error:
             return SearchUserCellModel(errorDescription: errorDescription!)
-        case .Ideal:
-            return SearchUserCellModel(user: user)
+        case .ideal:
+            return SearchUserCellModel(user: user, dispatchGroup: dispatchGroup, sequentialDisplay: sequentialDisplay)
         }
     }
     

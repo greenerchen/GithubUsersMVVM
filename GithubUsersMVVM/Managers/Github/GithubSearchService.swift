@@ -18,18 +18,35 @@ struct GithubUsersSearchResponse: Codable {
 struct GithubUserItem: Codable {
     var login: String
     var id: Int
-    var node_id: String
-    var avatar_url: String
-    var gravatar_id: String
+    var nodeId: String
+    var avatarUrl: String
+    var gravatarId: String
     var url: String
-    var html_url: String
-    var followers_url: String
-    var subscriptions_url: String
-    var organizations_url: String
-    var repos_url: String
-    var received_events_url: String
-    var type: String
+    var htmlUrl: String
+    var followersUrl: String
+    var subscriptionsUrl: String
+    var organizationsUrl: String
+    var reposUrl: String
+    var receivedEventsUrl: String
+    var _type: String
     var score: Float
+    
+    enum CodingKeys: String, CodingKey {
+        case login
+        case id
+        case nodeId = "node_id"
+        case avatarUrl = "avatar_url"
+        case gravatarId = "gravatar_id"
+        case url
+        case htmlUrl = "html_url"
+        case followersUrl = "followers_url"
+        case subscriptionsUrl = "subscriptions_url"
+        case organizationsUrl = "organizations_url"
+        case reposUrl = "repos_url"
+        case receivedEventsUrl = "received_events_url"
+        case _type = "type"
+        case score
+    }
 }
 
 typealias SearchUsersResponse = ([GithubUserItem]?, Paginations?, Error?) -> Void
@@ -49,6 +66,11 @@ class GithubSearchService: GithubService, GithubSearchServiceProtocol {
         self.sendGetRequest(url, parameters: parameters, headers: self.defaultHeaders)
             .response { (response) in
                 guard response.value != nil else {
+                    completion(nil, nil, response.error!)
+                    return
+                }
+                
+                guard let code = response.response?.statusCode, code == 200 else {
                     completion(nil, nil, response.error!)
                     return
                 }

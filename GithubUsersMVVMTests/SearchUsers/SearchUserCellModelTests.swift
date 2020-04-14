@@ -62,7 +62,7 @@ class SearchUserCellModelTests: XCTestCase {
         }.inObjectScope(.discardedAfterTest)
         
         sut = SearchUserCellModel(user: stubUser.login, emptyDescription: nil, errorDescription: nil)
-        let testUser = sut.user.value!
+        let testUser = sut.user!
         XCTAssert(testUser == stubCellModeUser, "Incorrect user \(testUser.username ?? "n/a"). Expected \(stubCellModeUser.username ?? "n/a").")
     }
 }

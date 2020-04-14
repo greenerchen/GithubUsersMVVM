@@ -11,6 +11,7 @@ target 'GithubUsersMVVM' do
   pod 'ReactiveCocoa', '~> 10.1'
   pod 'ReactiveSwift', '~> 6.2'
   pod 'Swinject', '~> 2.7.1'
+  pod 'SkeletonView'
 
   target 'GithubUsersMVVMTests' do
     inherit! :search_paths

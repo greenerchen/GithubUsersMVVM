@@ -1,10 +1,10 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/greenerchen/githubusersmvvm/badge)](https://www.codefactor.io/repository/github/greenerchen/githubusersmvvm)
+[![codebeat badge](https://codebeat.co/badges/b4b79749-8e52-42e0-8808-0f7458ae9063)](https://codebeat.co/projects/github-com-greenerchen-githubusersmvvm-master)
 [![Build Status](https://app.bitrise.io/app/c89249ac558e6971/status.svg?token=LTjhKnvGUshY_Tm4JoECnA&branch=master)](https://app.bitrise.io/app/c89249ac558e6971)
 
 # GithubUsersMVVM
 This project demonstrates Protocol-Oriented Programming (POP), the UI architectural MVVM pattern with bindings with ReactiveSwift in Swift 5.
 
-![Screenshot](screenshot.png)
+![Screenshot](app.gif)
 
 ## Features 
 - It provides an input UI to enter keywords to search users from [Github search API](https://developer.github.com/v3/search/#search-users)
@@ -22,7 +22,7 @@ This project demonstrates Protocol-Oriented Programming (POP), the UI architectu
 
 ## Concurrency 
 - Used Grand Central Dispatch (GCD) to dispatch UI updates onto the main queue, since UIKit cannot be used from a background queue
-- Used Alamofire for Networking services. Will demo it in another project. 
+- Used the 3rd party library of SkeletonView and DispatchGroup to display searched results sequentially or at a time  
 
 ## SOLID Principles 
 - Single Responsibility Principle: 1) used MVVM pattern to separate the busniess logics and the view/view controller and resolve the controller-view tightly-coupled problem in the architecture MVC pattern. 2) used Dependency Injection to separate the responsibility of dependent object creation from the instance.
