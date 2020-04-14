@@ -56,7 +56,7 @@ class SearchUsersViewModelTests: XCTestCase {
 
     func testLoadUsers() {
         let stubEmptyDesc = "This is none"
-        let stubUser: GithubUserItem = GithubUserItem(login: "octocat", id: 1, node_id: "", avatar_url: "https://github.com/images/error/octocat_happy.gif", gravatar_id: "", url: "", html_url: "", followers_url: "", subscriptions_url: "", organizations_url: "", repos_url: "", received_events_url: "", type: "", score: 10)
+        let stubUser: GithubUserItem = GithubUserItem(login: "octocat", id: 1, nodeId: "", avatarUrl: "https://github.com/images/error/octocat_happy.gif", gravatarId: "", url: "", htmlUrl: "", followersUrl: "", subscriptionsUrl: "", organizationsUrl: "", reposUrl: "", receivedEventsUrl: "", _type: "", score: 10)
             
         mockSearchService = MockGithubSearchService()
         mockSearchService.stubSearchedUsersItems = [stubUser]
@@ -92,7 +92,7 @@ class SearchUsersViewModelTests: XCTestCase {
     func testLoadNoMoreUsers() {
         let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
                                                                                      id: 1,
-                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     avatarUrl: "https://github.com/images/error/octocat_happy.gif",
                                                                                      score: 10.0)
         
         mockSearchService = MockGithubSearchService()
@@ -114,11 +114,11 @@ class SearchUsersViewModelTests: XCTestCase {
     func testLoadMoreUsersOnce() {
         let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
                                                                                      id: 1,
-                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     avatarUrl: "https://github.com/images/error/octocat_happy.gif",
                                                                                      score: 10.0)
         let stubUser2: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "starcat",
                                                                                      id: 2,
-                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     avatarUrl: "https://github.com/images/error/octocat_happy.gif",
                                                                                      score: 11.0)
         
         mockSearchService = MockGithubSearchService()
@@ -141,7 +141,7 @@ class SearchUsersViewModelTests: XCTestCase {
     func testLoadMoreUsersWithErrors() {
         let stubUser1: GithubUserItem = StubGithubUserFactory().createGithubUserItem(login: "octocat",
                                                                                      id: 1,
-                                                                                     avatar_url: "https://github.com/images/error/octocat_happy.gif",
+                                                                                     avatarUrl: "https://github.com/images/error/octocat_happy.gif",
                                                                                      score: 10.0)
         
         mockSearchService = MockGithubSearchService()
