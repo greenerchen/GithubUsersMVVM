@@ -38,38 +38,34 @@ class SearchUserCellModel {
     
     var usersService: GithubUsersService? = GithubServiceContainer.shared.resolve(GithubUsersService.self)
     
-    func download(username: String? = nil, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) {
-        if let username = username {
-            dispatchGroup?.enter()
-            
-            usersService?.singleUser(username: username, completion: { [weak self] (singleUser, error) in
-                guard error == nil else {
-                    self?.user = SingleUser(username: singleUser.login, avatarUrl: nil, screenName: nil, location: nil, publicRepos: 0, followers: 0, following: 0)
-                    self?.displayObserver.send(value: (self?.user)!)
-                    return
-                }
-                
-                self?.user = SingleUser(username: singleUser.login,
-                                                  avatarUrl: singleUser.avatarUrl,
-                                                  screenName: singleUser.name,
-                                                  location: singleUser.location,
-                                                  publicRepos: singleUser.publicRepos,
-                                                  followers: singleUser.followers,
-                                                  following: singleUser.following)
-                if sequentialDisplay {
-                    self?.displayObserver.send(value: (self?.user)!)
-                }
-            
-                dispatchGroup?.leave()
-            })
-                
-            dispatchGroup?.notify(queue: DispatchQueue.global()) { [weak self] in
-                if !sequentialDisplay {
-                    self?.displayObserver.send(value: (self?.user)!)
-                }
+    func download(username: String, dispatchGroup: DispatchGroup? = nil, sequentialDisplay: Bool = true) {
+        dispatchGroup?.enter()
+
+        usersService?.singleUser(username: username, completion: { [weak self] (singleUser, error) in
+            guard error == nil else {
+                self?.user = SingleUser(username: singleUser.login, avatarUrl: nil, screenName: nil, location: nil, publicRepos: 0, followers: 0, following: 0)
+                self?.displayObserver.send(value: (self?.user)!)
+                return
             }
             
+            self?.user = SingleUser(username: singleUser.login,
+                                    avatarUrl: singleUser.avatarUrl,
+                                    screenName: singleUser.name,
+                                    location: singleUser.location,
+                                    publicRepos: singleUser.publicRepos,
+                                    followers: singleUser.followers,
+                                    following: singleUser.following)
+            if sequentialDisplay {
+                self?.displayObserver.send(value: (self?.user)!)
+            }
             
+            dispatchGroup?.leave()
+        })
+        
+        dispatchGroup?.notify(queue: DispatchQueue.global()) { [weak self] in
+            if !sequentialDisplay {
+                self?.displayObserver.send(value: (self?.user)!)
+            }
         }
     }
 }

@@ -30,11 +30,6 @@ class SearchUserIdealCell: SearchUserBaseCell {
         super.awakeFromNib()
         // Initialization code
         avatarImageView.layer.cornerRadius = 5.0
-        usernameLabel.text = ""
-        screenNameLabel.text = ""
-        locationLabel.text = ""
-        
-        setupSkeletons()
     }
     
     override func set(model: SearchUserCellModel) {
@@ -64,31 +59,6 @@ class SearchUserIdealCell: SearchUserBaseCell {
                 
             }
         }
-    }
-    
-    private func setupSkeletons() {
-        avatarImageView.isSkeletonable = true
-        avatarImageView.skeletonCornerRadius = 5.0
-        usernameLabel.isSkeletonable = true
-        usernameLabel.skeletonCornerRadius = 5.0
-        screenNameLabel.isSkeletonable = true
-        screenNameLabel.skeletonCornerRadius = 5.0
-        locationImage.isSkeletonable = true
-        locationImage.skeletonCornerRadius = 5.0
-        locationLabel.isSkeletonable = true
-        locationLabel.skeletonCornerRadius = 5.0
-        repositoryIcon.isSkeletonable = true
-        repositoryIcon.skeletonCornerRadius = 5.0
-        repositoryLabel.isSkeletonable = true
-        repositoryLabel.skeletonCornerRadius = 5.0
-        followersIcon.isSkeletonable = true
-        followersIcon.skeletonCornerRadius = 5.0
-        followersLabel.isSkeletonable = true
-        followersLabel.skeletonCornerRadius = 5.0
-        followingIcon.isSkeletonable = true
-        followingIcon.skeletonCornerRadius = 5.0
-        followingLabel.isSkeletonable = true
-        followingLabel.skeletonCornerRadius = 5.0
     }
     
     private func showAllSkeletons() {
